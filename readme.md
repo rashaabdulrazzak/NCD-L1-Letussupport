@@ -1,6 +1,9 @@
 ## Main Idea:  
 Create a platform where people can donate to charity projects and ask for a donation to their projects.
 
+##### Video Link: https://www.loom.com/share/65ca5aa2b7874670b2bc1057d3f374bf
+##### Frontend Live Link: https://projects-web.herokuapp.com/ 
+
 ### How to use:
 1. Clone the repository.
 2. Run   `yarn install`. 
