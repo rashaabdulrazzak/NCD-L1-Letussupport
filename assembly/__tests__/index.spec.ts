@@ -1,53 +1,133 @@
 // contract/assembly/__tests__/index.spec.ts
 
-import { create, getById, get, update, del } from "../index";
-import { Todo, todos } from "../model";
+import { u128 } from "near-sdk-as";
+import { projects, projectIdList } from "../model";
+import { create, getProject, listOfProjects, listOfIdProject, updateFund, donateForPoject } from "../index";
 
 describe("contract methods", () => {
-  it("creates a todo", () => {
+  // Creat a project
+  it("creates a project", () => {
     // call the create method
-    const todo = create("Drink water");
+    let name = 'Build School';
+    let address = "voying.testnet";
+    let funds = '200';
+    let description = "let's build schools";
 
-    // lookup in the PersistentUnorderedMap for our todo
-    // expect the persisted todo to equal the todo returned
-    // by the create method above.
-    expect(todos.getSome(todo.id)).toStrictEqual(todo);
+    // it will create a project and return its id as a result
+    let project = create(address, name, funds, description);
+
+    // expect the projectIdList length to increased by 1 
+    //expect the projects presistent map to cantain project whos id the resulted id 
+    // and its content is the provided name, address, funds and description
+
+    expect(projectIdList.length).toBe(1);
+    expect(projects.getSome(project).name).toStrictEqual(name)
+    expect(projects.getSome(project).address).toStrictEqual(address)
+    expect(projects.getSome(project).funds).toStrictEqual(u128.from(funds))
+    expect(projects.getSome(project).description).toStrictEqual(description)
   });
-  it("gets a todo by id", () => {
-    // create three todos
-    const a = Todo.insert("Drink water");
-    const b = Todo.insert("Get sleep");
-    const c = Todo.insert("Exercise");
 
-    // get each todo by its it
-    expect(getById(a.id)).toStrictEqual(a);
-    expect(getById(b.id)).toStrictEqual(b);
-    expect(getById(c.id)).toStrictEqual(c);
+  // Get project by its id 
+  it("gets a project by its id", () => {
+    // create two projects 
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
+
+    // get each project by its id
+    // info for project one
+    expect(getProject(projectOneId)).toBeTruthy()
+    expect(getProject(projectOneId).name).toStrictEqual("projectOne")
+    expect(getProject(projectOneId).address).toStrictEqual("projectOne.testnet")
+    expect(getProject(projectOneId).funds).toStrictEqual(u128.from("12"))
+    expect(getProject(projectOneId).description).toStrictEqual("project One description")
+    // info for project two
+    expect(getProject(projectTwoId)).toBeTruthy()
+    expect(getProject(projectTwoId).name).toStrictEqual("projectTwo")
+    expect(getProject(projectTwoId).address).toStrictEqual("projectTwo.testnet")
+    expect(getProject(projectTwoId).funds).toStrictEqual(u128.from("12"))
+    expect(getProject(projectTwoId).description).toStrictEqual("project Two description")
+
   });
-  it('gets a list of todos', () => {
-    const todos = new Array<number>(100)
-      .fill(0)
-      .map<Todo>((_, i) => Todo.insert('todo' + i.toString()))
-    expect(get(20)).toStrictEqual(todos.slice(20, 30));
-    expect(get(0, 10)).toStrictEqual(todos.slice(0, 10));
-    expect(get(10, 10)).toStrictEqual(todos.slice(10, 20));
-    expect(get(50, 50)).toStrictEqual(todos.slice(50, 100));
+
+  // List the existing projects
+  it("displays all existing projects", () => {
+    // create two projects 
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
+    // call listOfProjects
+    let resultProjects = listOfProjects();
+
+    // the resulted array should contain 2 elements    
+    expect(resultProjects.length).toBe(2)
+
+    // the first element should be project One
+    expect(resultProjects[0].name).toStrictEqual("projectOne")
+
+    // the second element should be project Two
+    expect(resultProjects[1].name).toStrictEqual("projectTwo")
   });
-  itThrows('deletes a todo', ()  {
-    const todo = Todo.insert('Drink water');
 
-    del(todo.id)
+  // List the ids of the existing projects
+  it("displays all existing projects", () => {
+    // create two projects 
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
 
-    Todo.findById(todo.id)
+    // call listOfIdProject
+    let resultProjects = listOfIdProject();
+
+    // the resulted array should contain 2 elements    
+    expect(resultProjects.length).toBe(2)
+
+    // the first element should be project One id
+    expect(resultProjects[0]).toStrictEqual(projectOneId)
+
+    // the second element should be project Two id 
+    expect(resultProjects[1]).toStrictEqual(projectTwoId)
   });
-  it('updates a todo', ()  {
-    const todo = Todo.insert('Water drink');
 
-    update(todo.id, { task: 'Drink water', done: true });
-    const todoAfterUpdate = Todo.findById(todo.id);
+  // Update the fund of an existing project
+  // it will check the incoming fund 
+  // if its greater than the existed fund it will make the needed ammount to zero
+  // and it will assign the incoming fund to the received value
+  // if the incoming fund is less than the existing fund 
+  // it means the project still need funds
 
-    expect(todoAfterUpdate.id).toStrictEqual(todo.id);
-    expect(todoAfterUpdate.task).toStrictEqual('Drink water');
-    expect(todoAfterUpdate.done).toStrictEqual(true);
+  it("update the fund of an existing project by its id", () => {
+    // create a project 
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+
+    // call update fund
+    let updatedProject = updateFund(projectOneId, "25");
+
+    //check the values of updated project  
+    expect(updatedProject.name).toStrictEqual("projectOne")
+    expect(updatedProject.address).toStrictEqual("projectOne.testnet")
+    expect(updatedProject.funds).toStrictEqual(u128.from("12"))
+    expect(updatedProject.residual).toStrictEqual(u128.from("0"))
+    expect(updatedProject.received).toStrictEqual(u128.from("25"))
+    expect(updatedProject.description).toStrictEqual("project One description")
   });
+
+  // donate for project 
+  it("donate for an existing project by its id", () => {
+    // create a project 
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+
+    // get the address of the project to donate to 
+    let projectInfo = getProject(projectOneId)
+    let addressInfo = projectInfo.address
+    let residual = projectInfo.residual
+    let received = projectInfo.received
+
+    // call donate function
+    let donationResult = donateForPoject(addressInfo, projectOneId, "1");
+    expect(donationResult).toStrictEqual("Donation done successfully")
+
+    // check if the value has updated with the incoming donation
+    let projectAfterDonation = getProject(projectOneId)
+    expect(projectAfterDonation.residual).toStrictEqual(u128.sub(residual, u128.from("1")))
+    expect(projectAfterDonation.received).toStrictEqual(u128.add(received, u128.from("1")))
+  });
+
 });
