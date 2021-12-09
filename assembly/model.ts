@@ -34,6 +34,10 @@ export class Project {
   // inputs : address: string, name: string, funds: string, description: string
   static createProject(address: string, name: string, funds: string, description: string): u32 {
     const funds_u128 = u128.from(funds);
+    
+    // length of address should be greater then 2 
+    assert(address.length>2,"Address lenght should be greater than 2")
+
     const newProject = new Project(name, address, funds_u128, description);
 
     projects.set(newProject.id, newProject);
