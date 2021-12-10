@@ -38,6 +38,9 @@ export class Project {
     // length of address should be greater then 2 
     assert(address.length>2,"Address lenght should be greater than 2")
 
+    // make sure funds is greater than zero
+    assert(funds_u128 > u128.Zero, "The funds should be greater than Zero")
+
     const newProject = new Project(name, address, funds_u128, description);
 
     projects.set(newProject.id, newProject);
