@@ -90,3 +90,9 @@ export function assert_single_promise_success(): void {
   assert(x.length == 1, "Expected exactly one promise result")
   assert(x[0].succeeded, "Expected PromiseStatus to be successful")
 }
+
+
+// Helpers function
+export function isEmpty(text: string): bool{
+  return (!!text)
+}

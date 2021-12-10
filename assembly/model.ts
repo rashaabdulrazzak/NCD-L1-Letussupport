@@ -1,7 +1,7 @@
 
 
 import { context, ContractPromiseBatch, logging, u128, PersistentMap, RNG, PersistentVector } from "near-sdk-as"
-
+import {isEmpty} from './utils'
 // Define the requird list 
 export const projects = new PersistentMap<u32, Project>("p")
 export const projectIdList = new PersistentVector<u32>("pl");
@@ -37,6 +37,9 @@ export class Project {
     
     // length of address should be greater then 2 
     assert(address.length>2,"Address lenght should be greater than 2")
+
+    // make sure the name is not empty
+    assert(isEmpty(name) , "The name should not be empty")
 
     // make sure funds is greater than zero
     assert(funds_u128 > u128.Zero, "The funds should be greater than Zero")
