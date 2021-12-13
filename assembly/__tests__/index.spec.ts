@@ -2,7 +2,7 @@
 
 import { u128 } from "near-sdk-as";
 import { projects, projectIdList } from "../model";
-import { create, getProject, listOfProjects, listOfIdProject, updateFund, donateForPoject } from "../index";
+import { create, getProject, listOfProjects, listOfIdProject, updateFund, donateForPoject,getNumberOfProjects } from "../index";
 
 describe("contract methods", () => {
   // Creat a project
@@ -129,5 +129,18 @@ describe("contract methods", () => {
     expect(projectAfterDonation.residual).toStrictEqual(u128.sub(residual, u128.from("1")))
     expect(projectAfterDonation.received).toStrictEqual(u128.add(received, u128.from("1")))
   });
+
+  // get the total number of added projects
+  it("it gives the number of all existing projects", () => {
+    // create one project
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    
+    // call getNumberOfProjects
+    let resultProjects = getNumberOfProjects();
+
+    // the result should be 1 
+    expect(resultProjects).toBe(1)    
+  });
+
 
 });

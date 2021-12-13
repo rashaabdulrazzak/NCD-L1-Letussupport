@@ -121,6 +121,13 @@ near call $CONTRACT donateForPoject '{"accountId" : "greeting.rashaabdulrazzak.t
  near call $CONTRACT  updateFund '{ "projectId" : 264861165 , "fund" : "500"}' --account-id dev-1637159318973-5757616574183
 ```
 
+8. Get the total number of added projects:
+
+```
+near call $CONTRACT getNumberOfProjects --account-id $CONTRACT
+
+```
+
 ### Used Technology:
 
 - Near sdk.
@@ -128,3 +135,7 @@ near call $CONTRACT donateForPoject '{"accountId" : "greeting.rashaabdulrazzak.t
 - Near-api-js.
 - Assemply script for writing the contract.
 - React for the front end.
+
+```
+
+```

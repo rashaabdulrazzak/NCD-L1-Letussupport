@@ -37,3 +37,8 @@ export function donateForPoject(accountId: string, id: u32, funds: string): stri
   return Project.donateForProject(accountId, id, funds)
 }
 
+// Get the number of added projects 
+export function getNumberOfProjects():u32{
+  return Project.getAddedProjects()
+}
+

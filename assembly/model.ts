@@ -1,7 +1,7 @@
 
 
 import { context, ContractPromiseBatch, logging, u128, PersistentMap, RNG, PersistentVector } from "near-sdk-as"
-import {isEmpty , hasAmmount} from './utils'
+import {isEmpty} from './utils'
 // Define the requird list 
 export const projects = new PersistentMap<u32, Project>("p")
 export const projectIdList = new PersistentVector<u32>("pl");
@@ -148,5 +148,17 @@ export class Project {
     // swap_remove delete an item by its index in the list not the id 
     //projectIdList.swap_remove(i32(projectId))// take index not id 
   }
+
+  // Get the Number of created projects
+  static getAddedProjects():u32{
+      if(projectIdList.length > 0){
+        logging.log("the number of added projects:"+ (projectIdList.length).toString() )
+        return projectIdList.length
+      }else{
+        logging.log("There is no project added yet" )
+        return 0
+      }
+  }
+
 
 }
