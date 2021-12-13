@@ -124,7 +124,7 @@ near call $CONTRACT donateForPoject '{"accountId" : "greeting.rashaabdulrazzak.t
 8. Get the total number of added projects:
 
 ```
-near call $CONTRACT getNumberOfProjects --account-id $CONTRACT
+near view $CONTRACT getNumberOfProjects
 
 ```
 
