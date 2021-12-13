@@ -1,10 +1,11 @@
 
 
-import { context, ContractPromiseBatch, logging, u128, PersistentMap, RNG, PersistentVector } from "near-sdk-as"
+import { context, ContractPromiseBatch, logging, u128, PersistentMap, RNG, PersistentVector, storage } from "near-sdk-as"
 import {isEmpty} from './utils'
 // Define the requird list 
 export const projects = new PersistentMap<u32, Project>("p")
 export const projectIdList = new PersistentVector<u32>("pl");
+export const fundedProject = storage.getPrimitive<i32>("fundedProject", 0)
 /**
  * Project class for projects need funds
  */
@@ -99,7 +100,9 @@ export class Project {
     }
     else {
       project.residual = u128.from(0);
-      project.received = income
+      project.received = income;
+      const newFundedProject = storage.getPrimitive<i32>("fundedProject", 0) + 1;
+      storage.set<i32>("fundedProject", newFundedProject);
     }
     logging.log("Project Residual : " + (project.residual).toString());
 
@@ -141,6 +144,7 @@ export class Project {
   // Delete project by id
   // This function will delete the project from the list of project
   // TODO Better way to delete the index from the id list know we check the index of it an call swap
+  // TODO Decide wether delete this project from the number of funded projects if it is fully funded
   static deleteProject(projectId: u32): void {
     logging.log("Project Id : " + (projectId).toString());
     //projects.delete(projectId)
@@ -159,6 +163,10 @@ export class Project {
         return 0
       }
   }
-
+ 
+ // Get the number of funded project
+ static getNumOfFundedProjects():u32{
+  return storage.getPrimitive<i32>("fundedProject", 0);
+}
 
 }
