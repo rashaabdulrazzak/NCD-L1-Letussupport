@@ -42,3 +42,7 @@ export function getNumberOfProjects():u32{
   return Project.getAddedProjects()
 }
 
+// Get the number of funded projects
+export function getFundedProjectsNumber():u32{
+  return Project.getNumOfFundedProjects()
+}
