@@ -1,7 +1,7 @@
 
 
 import { context, ContractPromiseBatch, logging, u128, PersistentMap, RNG, PersistentVector } from "near-sdk-as"
-import {isEmpty} from './utils'
+import {isEmpty , hasAmmount} from './utils'
 // Define the requird list 
 export const projects = new PersistentMap<u32, Project>("p")
 export const projectIdList = new PersistentVector<u32>("pl");
@@ -88,7 +88,7 @@ export class Project {
 
     // Convert the incoming fund to u128 type     
     const income = u128.fromString(funds, 10);
-
+    
     // Get the project by its id 
     const project = projects.getSome(id);
 
@@ -101,7 +101,7 @@ export class Project {
       project.residual = u128.from(0);
       project.received = income
     }
-    logging.log("Project Id : " + (project.residual).toString());
+    logging.log("Project Residual : " + (project.residual).toString());
 
     // Update the existing project 
     projects.set(id, project);
@@ -130,6 +130,7 @@ export class Project {
   // it require update the funds of the exsisting project 
   // also transfer the money from the sender to the account of project o testnet 
   static donateForProject(accountId: string, id: u32, funds: string): string {
+    
     this.updateFundOfProject(id, funds);
     this.sendDonation(accountId);
 
