@@ -173,5 +173,30 @@ export class Project {
   return storage.getPrimitive<i32>("fundedProject", 0);
 }
 
+// Get Projects by specific numbers
+static getProjectsByNnumber(startIndex: i32, endIndex: i32): Project[] {
+  if (endIndex > projectIdList.length) {
+    endIndex = projectIdList.length
+  }
+  let range = endIndex - startIndex
+  const numProjectInRange = min(range, projectIdList.length);
+  
+  const result = new Array<Project>();
+
+  for (let i = 0; i < numProjectInRange; i++) {
+    if(startIndex < 0) {
+      if(-startIndex > projectIdList.length) {
+        startIndex = 0
+      } else {
+        startIndex = projectIdList.length + startIndex
+      }
+    }
+    result[i] = projects.getSome(projectIdList[i + startIndex]);
+  }
+  
+  return result;
+}
+
+
 }
 

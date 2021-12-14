@@ -46,3 +46,8 @@ export function getNumberOfProjects():u32{
 export function getFundedProjectsNumber():u32{
   return Project.getNumOfFundedProjects()
 }
+
+// Get projects by specific range 
+export function getProjectsBySpecifcNumber(startIndex:i32,endIndex:i32):Array<Project>{
+  return Project.getProjectsByNnumber(startIndex,endIndex)
+}
