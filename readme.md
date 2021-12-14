@@ -128,6 +128,40 @@ near view $CONTRACT getNumberOfProjects
 
 ```
 
+9. Get projects by range
+
+```
+ near call $CONTRACT getProjectsBySpecifcRange '{"startIndex" : 0 , "endIndex" : 2}' --account-id $CONTRACT
+```
+
+The result will be like:
+
+```
+[
+  {
+    id: 3295975327,
+    address: 'greeting.rashaabdulrazzak.testnet',
+    name: 'plant trees',
+    funds: '1',
+    received: '1',
+    residual: '0',
+    description: 'Let us make the environment cleaner',
+    category: null
+  },
+  {
+    id: 3501703622,
+    address: 'rashaabdulrazzak.testnet',
+    name: 'buildSchool',
+    funds: '200',
+    received: '0',
+    residual: '200',
+    description: 'Let us help increase the knowlege',
+    category: null
+  }
+]
+
+```
+
 ### Used Technology:
 
 - Near sdk.
