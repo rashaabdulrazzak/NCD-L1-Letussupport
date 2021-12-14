@@ -12,9 +12,10 @@ describe("contract methods", () => {
     let address = "voying.testnet";
     let funds = '200';
     let description = "let's build schools";
+    let category = 'uncategorized'
 
     // it will create a project and return its id as a result
-    let project = create(address, name, funds, description);
+    let project = create(address, name, funds, description,category);
 
     // expect the projectIdList length to increased by 1 
     //expect the projects presistent map to cantain project whos id the resulted id 
@@ -25,13 +26,14 @@ describe("contract methods", () => {
     expect(projects.getSome(project).address).toStrictEqual(address)
     expect(projects.getSome(project).funds).toStrictEqual(u128.from(funds))
     expect(projects.getSome(project).description).toStrictEqual(description)
+    expect(projects.getSome(project).category).toStrictEqual(category)
   });
 
   // Get project by its id 
   it("gets a project by its id", () => {
     // create two projects 
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
-    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Personal");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description","Charity");
 
     // get each project by its id
     // info for project one
@@ -40,20 +42,22 @@ describe("contract methods", () => {
     expect(getProject(projectOneId).address).toStrictEqual("projectOne.testnet")
     expect(getProject(projectOneId).funds).toStrictEqual(u128.from("12"))
     expect(getProject(projectOneId).description).toStrictEqual("project One description")
+    expect(getProject(projectOneId).category).toStrictEqual("Personal")
     // info for project two
     expect(getProject(projectTwoId)).toBeTruthy()
     expect(getProject(projectTwoId).name).toStrictEqual("projectTwo")
     expect(getProject(projectTwoId).address).toStrictEqual("projectTwo.testnet")
     expect(getProject(projectTwoId).funds).toStrictEqual(u128.from("12"))
     expect(getProject(projectTwoId).description).toStrictEqual("project Two description")
+    expect(getProject(projectTwoId).category).toStrictEqual("Charity")
 
   });
 
   // List the existing projects
   it("displays all existing projects", () => {
     // create two projects 
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
-    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Charity");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description","Charity");
     // call listOfProjects
     let resultProjects = listOfProjects();
 
@@ -70,8 +74,8 @@ describe("contract methods", () => {
   // List the ids of the existing projects
   it("displays all existing projects", () => {
     // create two projects 
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
-    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Charity");
+    let projectTwoId = create("projectTwo.testnet", "projectTwo", "12", "project Two description","Charity");
 
     // call listOfIdProject
     let resultProjects = listOfIdProject();
@@ -95,7 +99,7 @@ describe("contract methods", () => {
 
   it("update the fund of an existing project by its id", () => {
     // create a project 
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Charity");
 
     // call update fund
     let updatedProject = updateFund(projectOneId, "25");
@@ -112,7 +116,7 @@ describe("contract methods", () => {
   // donate for project 
   it("donate for an existing project by its id", () => {
     // create a project 
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Charity");
 
     // get the address of the project to donate to 
     let projectInfo = getProject(projectOneId)
@@ -133,7 +137,7 @@ describe("contract methods", () => {
   // get the total number of added projects
   it("it gives the number of all existing projects", () => {
     // create one project
-    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description");
+    let projectOneId = create("projectOne.testnet", "projectOne", "12", "project One description","Charity");
     
     // call getNumberOfProjects
     let resultProjects = getNumberOfProjects();

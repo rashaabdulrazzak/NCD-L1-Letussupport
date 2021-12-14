@@ -19,7 +19,7 @@ Create a platform where people can donate to charity projects and ask for a dona
 1. Create project:
 
 ```
- near call $CONTRACT  create '{"name" : "plant trees" ,"address" : "greeting.rashaabdulrazzak.testnet", "funds" : "500", "description" : "Let us make the environment cleaner"}' --account-id dev-1637159318973-57576165741839
+ near call $CONTRACT  create '{"name" : "plant trees" ,"address" : "greeting.rashaabdulrazzak.testnet", "funds" : "500", "description" : "Let us make the environment cleaner", "category" :"uncategorized"}' --account-id $CONTRACT
 ```
 
 - If the upper code runs successfully, We get the id of the project and a link to check the resulted execution on testnet
