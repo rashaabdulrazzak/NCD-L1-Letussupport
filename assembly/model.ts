@@ -6,6 +6,7 @@ import {isEmpty} from './utils'
 export const projects = new PersistentMap<u32, Project>("p")
 export const projectIdList = new PersistentVector<u32>("pl");
 export const fundedProject = storage.getPrimitive<i32>("fundedProject", 0)
+
 /**
  * Project class for projects need funds
  */
@@ -18,8 +19,9 @@ export class Project {
   received: u128;
   residual: u128;
   description: string;
+  category:string
 
-  constructor(name: string, address: string, funds: u128, description: string) {
+  constructor(name: string, address: string, funds: u128, description: string, category:string) {
     const rng = new RNG<u32>(1, u32.MAX_VALUE);
     const roll = rng.next();
     this.id = roll;
@@ -28,12 +30,13 @@ export class Project {
     this.funds = funds;
     this.received = u128.from(0);
     this.residual = this.funds;
-    this.description = description
+    this.description = description;
+    this.category = category
   }
 
   // Create a project and add it to project list and ids 
   // inputs : address: string, name: string, funds: string, description: string
-  static createProject(address: string, name: string, funds: string, description: string): u32 {
+  static createProject(address: string, name: string, funds: string, description: string,category:string): u32 {
     const funds_u128 = u128.from(funds);
     
     // length of address should be greater then 2 
@@ -45,13 +48,14 @@ export class Project {
     // make sure funds is greater than zero
     assert(funds_u128 > u128.Zero, "The funds should be greater than Zero")
 
-    const newProject = new Project(name, address, funds_u128, description);
+    const newProject = new Project(name, address, funds_u128, description,category);
 
     projects.set(newProject.id, newProject);
 
     logging.log("Project Id : " + (newProject.id).toString());
 
-    projectIdList.push(newProject.id);
+    projectIdList.push(newProject.id);       
+    
     return newProject.id;
   }
 
@@ -170,3 +174,4 @@ export class Project {
 }
 
 }
+

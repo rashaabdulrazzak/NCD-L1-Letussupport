@@ -1,8 +1,8 @@
 import { Project } from "./model";
 
-export function create(address: string, name: string, funds: string, description: string): u32 {
+export function create(address: string, name: string, funds: string, description: string,category:string): u32 {
   // use the Project class to persist the project data
-  return Project.createProject(address, name, funds, description);
+  return Project.createProject(address, name, funds, description,category);
 }
 
 // Get project by its id
